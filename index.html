@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operazione Nuraghe — Cagliari, Via Roma</title>
+  <link rel="icon" href="data:," />
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/index-BLwOmYzv.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BwaEfCa-.css">
+</head>
+<body>
+  <canvas id="world" aria-label="Scenario 3D di Cagliari, Via Roma"></canvas>
+  <div id="vignette"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Operazione Nuraghe, menu principale"><span class="brand-mark">N</span><span>NURAGHE<small>CAGLIARI · 39°12′ N / 9°06′ E</small></span></a>
+    <div class="location"><span class="live-dot"></span> VIA ROMA <span class="divider">/</span> <span id="clock">10:14:00</span></div>
+    <div class="render-controls"><label for="quality">GRAFICA</label><select id="quality" aria-label="Qualità grafica"><option value="high">Alta</option><option value="ultra">Ultra</option></select><span id="render-stats">CARICAMENTO</span><button id="menu-button" class="quiet" title="Menu e pausa">ESC <span>MENU</span></button></div>
+  </header>
+  <main>
+    <section id="menu" class="menu-panel" aria-labelledby="title">
+      <div class="eyebrow"><span class="line"></span> SARDEGNA / OPERAZIONE 001</div>
+      <h1 id="title">Il porto tace.<br><em>La città no.</em></h1>
+      <p class="lead">Cagliari, una mattina sul porto. La rete di droni è fuori controllo. Attraversa Via Roma, scollega tre ripetitori e raggiungi la barca alla Darsena.</p>
+      <div class="mode-picker" role="group" aria-label="Modalità">
+        <button id="mode-mission" aria-pressed="true" class="selected" disabled>01 <span>Missione</span></button>
+        <button id="mode-explore" aria-pressed="false" disabled>02 <span>Esplorazione</span></button>
+      </div>
+      <button id="deploy" class="primary" disabled>CARICAMENTO SCENARIO… <span>↗</span></button>
+      <p id="menu-message" class="micro">Geografia reale. Missione immaginaria.</p>
+      <div class="briefing">
+        <div><span class="brief-number">03</span><small>RIPETITORI</small></div>
+        <div><span class="brief-number">~600 m</span><small>PERCORSO COSTIERO</small></div>
+        <div><span class="brief-number">OSM</span><small>GEOMETRIE REALI</small></div>
+      </div>
+      <details>
+        <summary>Comandi e informazioni sulla mappa</summary>
+        <p>WASD / frecce: movimento · mouse: visuale · clic: fuoco anti-drone · tasto destro: mirino reflex · R: ricarica · E: interagisci · Maiusc + avanti: corsa · Spazio: salto · Esc: pausa · M: mappa.</p>
+        <p>Su touch: trascina a sinistra per muoverti e a destra per guardare. Usa i pulsanti a schermo.</p>
+        <p>Strade, costa e sagome: OpenStreetMap. Materiali PBR, HDR e arredi glTF: Poly Haven (CC0). Auto, yacht e motolance GLB: Innerscene (CC0). Parcheggi e ormeggi sono scenografici, non un censimento dei mezzi reali. Facciate ricostruite da riferimenti fotografici, non da scansioni. Rilievo SRTM 90 m nell'entroterra; banchine livellate. Nessuna immagine Google Earth.</p>
+        <p>Cielo HDR fotografico con nuvole in movimento, atmosfera Rayleigh/Mie e sole dinamico. Le ombre delle nuvole sono proiettate sulle superfici, non un sistema volumetrico; riflessi e sole sull'acqua seguono l'illuminazione.</p>
+        <p>Alta: GTAO a mezza risoluzione, ombre 2K, SMAA. Ultra: ombre 4K e più campioni GTAO. Le texture, i modelli e le geometrie sono uguali: cambia il costo del rendering.</p>
+        <p>N-15: carabina immaginaria con aspetto esterno ispirato ad AR-15, guanti, ricarica animata e bossoli. Modello originale, non una scansione o una simulazione balistica. Accelerazione, frenata, passo e inerzia dell'arma; oscillazione ridotta durante la mira.</p>
+        <p><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">Licenza e attribuzione OpenStreetMap</a> · Gioco originale, non affiliato a Saltline.</p>
+      </details>
+    </section>
+    <section id="hud" hidden aria-label="Stato missione">
+      <div class="mission-card"><span class="eyebrow">OBIETTIVO ATTIVO</span><h2 id="objective">Scollega la rete</h2><p id="relay-status">0 / 3 RIPETITORI</p></div>
+      <div class="compass"><span id="bearing">SE · 130°</span><div>│</div></div>
+      <div id="crosshair" aria-hidden="true">+</div>
+      <div id="prompt" role="status"></div>
+      <div class="vitals"><span class="eyebrow">INTEGRITÀ</span><strong id="health">100</strong><progress id="health-bar" max="100" value="100" aria-label="Integrità"></progress></div>
+      <div class="weapon"><span class="eyebrow">N-15 / ANTI-DRONE</span><div><strong id="ammo">24</strong><span id="reserve"> / 144</span></div><small id="weapon-state">R PER RICARICARE</small></div>
+      <div class="keys">WASD <span>MUOVI</span> E <span>INTERAGISCI</span> M <span>MAPPA</span></div>
+    </section>
+    <aside id="map-panel" class="map-panel" aria-label="Mappa tattica">
+      <div class="map-heading"><span>MARINA / CAGLIARI</span><button id="map-toggle" title="Espandi o riduci mappa">M ↗</button></div>
+      <canvas id="minimap" width="340" height="270" aria-label="Mappa OSM con posizione, ripetitori e punto di estrazione"></canvas>
+      <div class="map-legend"><span>● Ripetitore</span><span>◇ Estrazione</span><span>N ↑</span></div>
+    </aside>
+    <div class="coordinate-tag" id="coordinates">39.21512 N &nbsp; 9.10982 E</div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="touch-controls" hidden>
+      <div id="move-pad" class="touch-pad" aria-label="Trascina per muoverti"><span>MUOVI</span></div>
+      <div id="look-pad" class="touch-pad" aria-label="Trascina per guardare"><span>VISUALE</span></div>
+      <div class="touch-actions"><button id="touch-fire">FUOCO</button><button id="touch-interact">E</button><button id="touch-reload">R</button></div>
+    </div>
+    <section id="result" class="result-panel" hidden aria-labelledby="result-title"><span class="eyebrow">OPERAZIONE NURAGHE</span><h2 id="result-title"></h2><p id="result-summary"></p><button id="restart" class="primary">TORNA AL BRIEFING ↗</button></section>
+  </main>
+  <footer><span>UN GIOCO ORIGINALE / VIA ROMA, CAGLIARI</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors · ODbL</a></footer>
+  <div id="fatal" role="alert" hidden></div>
+  <script type="application/json" id="license-notices">{"code":"MIT License\n\nCopyright (c) 2026 Operazione Nuraghe contributors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n\nOpenStreetMap-derived data in src/data/cagliari.json is licensed separately\nunder ODbL 1.0, not MIT. See README.md and https://www.openstreetmap.org/copyright.\n","three":"The MIT License\n\nCopyright © 2010-2025 three.js authors\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n","geography":"© OpenStreetMap contributors. Derived database: ODbL 1.0. https://www.openstreetmap.org/copyright","assets":"HDR, PBR textures and street props: Poly Haven, CC0 1.0. https://polyhaven.com/license","vehicles":[{"id":"compact_hatchback","sha256":"b5b7b28d4746b025a1d10ffd1d1682cfd7bea54af2ae9144ca88003487f4978a","provider":"Innerscene","title":"Blue five-door compact hatchback","page":"https://www.innerscene.com/tools/library/3d-parts/blue-five-door-compact-hatchback-5b95b2a0","source":"https://www.innerscene.com/api/library/blue-five-door-compact-hatchback-5b95b2a0/download","license":"CC0-1.0","licenseUrl":"https://www.innerscene.com/tools/library/terms"},{"id":"sailing_yacht","sha256":"ca741998d833804a73a747aa28b04912a6e431937cd3372cc7508ea65462850e","provider":"Innerscene","title":"Sailing yacht, 8 m","page":"https://www.innerscene.com/tools/library/3d-parts/sailing-yacht-8-m-aa9dbd30","source":"https://www.innerscene.com/api/library/sailing-yacht-8-m-aa9dbd30/download","license":"CC0-1.0","licenseUrl":"https://www.innerscene.com/tools/library/terms"},{"id":"motor_launch","sha256":"6f4f74e8f0e4a2dc4434fd01dcbe5721fbeceb240d6d2385720b581157f82b5d","provider":"Innerscene","title":"Water taxi boat","page":"https://www.innerscene.com/tools/library/3d-parts/water-taxi-boat-925a8345","source":"https://www.innerscene.com/api/library/water-taxi-boat-925a8345/download","license":"CC0-1.0","licenseUrl":"https://www.innerscene.com/tools/library/terms"}],"elevation":"NASA SRTM 90 m via OpenTopoData, public domain."}</script>
+</body>
+</html>
